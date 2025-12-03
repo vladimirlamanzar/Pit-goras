@@ -1,1 +1,562 @@
+import React, { useState } from 'react';
+import { ChevronRight, ChevronLeft, Crown, Zap, Calculator, Ruler, Monitor, Footprints, ArrowRight, CheckCircle, HelpCircle } from 'lucide-react';
 
+const SlideDeck = () => {
+  const [currentSlide, setCurrentSlide] = useState(0);
+  const [step, setStep] = useState(0); // Controla los pasos de la solución
+
+  // Reiniciar pasos al cambiar de diapositiva
+  const changeSlide = (direction) => {
+    if (direction === 'next' && currentSlide < slides.length - 1) {
+      setCurrentSlide(curr => curr + 1);
+      setStep(0);
+    } else if (direction === 'prev' && currentSlide > 0) {
+      setCurrentSlide(curr => curr - 1);
+      setStep(0);
+    }
+  };
+
+  const nextStep = () => setStep(s => s + 1);
+
+  const slides = [
+    // --- BLOQUE 1: INTRODUCCIÓN ---
+    {
+      id: 0,
+      title: "MISIÓN: PITÁGORAS",
+      subtitle: "Matemáticas Prácticas",
+      content: (
+        <div className="flex flex-col items-center mt-8">
+           <div className="p-6 bg-slate-800 rounded-2xl border-2 border-dashed border-slate-600">
+             <p className="text-slate-400 mb-2">Objetivo de hoy:</p>
+             <ul className="text-left space-y-2 text-lg">
+               <li className="flex items-center gap-2"><CheckCircle className="text-cyan-400" size={20}/> Identificar al "Jefe" (Hipotenusa)</li>
+               <li className="flex items-center gap-2"><CheckCircle className="text-green-400" size={20}/> Calcular distancias sin medir</li>
+               <li className="flex items-center gap-2"><CheckCircle className="text-pink-400" size={20}/> Resolver problemas de la vida real</li>
+             </ul>
+           </div>
+        </div>
+      )
+    },
+    {
+      id: 1,
+      title: "¿DÓNDE FUNCIONA?",
+      subtitle: "La Regla del 90°",
+      content: (
+        <div className="flex flex-col items-center justify-center h-full gap-8">
+          <div className="flex gap-8 md:gap-16 items-end">
+            
+            {/* Acutángulo (NO) */}
+            <div className="flex flex-col items-center opacity-40">
+              <svg width="100" height="100" viewBox="0 0 100 100" className="mb-2">
+                <polygon points="50,10 90,90 10,90" fill="none" stroke="#f87171" strokeWidth="4" />
+              </svg>
+              <p className="text-red-400 font-bold">NO</p>
+            </div>
+            
+            {/* Rectángulo (SÍ) */}
+            <div className="flex flex-col items-center scale-125 transition-transform p-4 bg-slate-800/50 rounded-xl border border-green-500/50 shadow-[0_0_30px_rgba(74,222,128,0.2)]">
+              <svg width="120" height="120" viewBox="0 0 100 100" className="mb-2">
+                {/* Lados */}
+                <line x1="20" y1="20" x2="20" y2="80" stroke="#22d3ee" strokeWidth="4" /> {/* Cateto Vertical */}
+                <line x1="20" y1="80" x2="80" y2="80" stroke="#4ade80" strokeWidth="4" /> {/* Cateto Base */}
+                <line x1="20" y1="20" x2="80" y2="80" stroke="#ec4899" strokeWidth="4" /> {/* Hipotenusa */}
+                {/* Cuadrito 90 grados */}
+                <rect x="20" y="65" width="15" height="15" fill="none" stroke="white" strokeWidth="2" />
+              </svg>
+              <p className="text-green-400 font-bold text-xl">SÍ (Rectángulo)</p>
+              <p className="text-xs text-slate-400 mt-2">Esquina perfecta (90°)</p>
+            </div>
+
+            {/* Obtusángulo (NO) */}
+            <div className="flex flex-col items-center opacity-40">
+               <svg width="100" height="100" viewBox="0 0 100 100" className="mb-2">
+                <polygon points="20,20 90,90 10,90" fill="none" stroke="#f87171" strokeWidth="4" />
+              </svg>
+              <p className="text-red-400 font-bold">NO</p>
+            </div>
+          </div>
+          <div className="bg-blue-500/20 px-6 py-3 rounded-lg border-l-4 border-blue-500 max-w-2xl">
+            <p className="text-blue-100"><strong>Regla #1:</strong> Si no hay un cuadrito de 90° en la esquina, Pitágoras no juega.</p>
+          </div>
+        </div>
+      )
+    },
+    {
+      id: 2,
+      title: "ANATOMÍA DEL TRIÁNGULO",
+      subtitle: "Aprende a diferenciar las partes",
+      content: (
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-center max-w-5xl w-full">
+          {/* Visual SVG */}
+          <div className="bg-slate-800 rounded-xl border border-slate-700 p-8 flex items-center justify-center">
+            <svg width="300" height="300" viewBox="0 0 200 200">
+               {/* Cateto A */}
+               <line x1="40" y1="40" x2="40" y2="160" stroke="#22d3ee" strokeWidth="6" />
+               <text x="10" y="100" fill="#22d3ee" fontWeight="bold" fontSize="14" transform="rotate(-90 10,100)">Cateto</text>
+               
+               {/* Cateto B */}
+               <line x1="40" y1="160" x2="160" y2="160" stroke="#4ade80" strokeWidth="6" />
+               <text x="80" y="185" fill="#4ade80" fontWeight="bold" fontSize="14">Cateto</text>
+               
+               {/* Hipotenusa */}
+               <line x1="40" y1="40" x2="160" y2="160" stroke="#ec4899" strokeWidth="6" />
+               <text x="110" y="90" fill="#ec4899" fontWeight="bold" fontSize="16">Hipotenusa (Jefe)</text>
+               
+               {/* Angulo */}
+               <rect x="40" y="140" width="20" height="20" fill="none" stroke="white" strokeWidth="2" />
+            </svg>
+          </div>
+
+          {/* Definitions */}
+          <div className="space-y-4">
+            <div className="group bg-slate-800 hover:bg-slate-700 p-4 rounded-xl border-l-4 border-cyan-400 transition-colors">
+              <h3 className="font-bold text-lg text-white">Los Catetos (Los Empleados)</h3>
+              <p className="text-slate-400 text-sm">Son los dos lados que forman la "L". Siempre tocan el ángulo recto.</p>
+            </div>
+            
+            <div className="group bg-slate-800 hover:bg-slate-700 p-4 rounded-xl border-l-4 border-pink-500 transition-colors shadow-[0_0_15px_rgba(236,72,153,0.1)]">
+              <h3 className="font-bold text-lg text-pink-400 flex items-center gap-2">La Hipotenusa (El Jefe)</h3>
+              <ul className="text-slate-300 text-sm list-disc list-inside mt-2 space-y-1">
+                <li>Es el lado más largo siempre.</li>
+                <li>Es "antisocial": <strong>NUNCA</strong> toca el ángulo recto.</li>
+                <li>Está enfrente de la esquina de 90°.</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      )
+    },
+
+    // --- BLOQUE 2: FÓRMULA ---
+    {
+      id: 3,
+      title: "LA FÓRMULA MAESTRA",
+      subtitle: "Copia esto en tu cuaderno",
+      content: (
+        <div className="flex flex-col items-center gap-8">
+          <div className="bg-slate-900 p-8 rounded-3xl border border-slate-700 shadow-2xl">
+            <div className="flex items-end gap-3 text-5xl md:text-8xl font-black tracking-wider font-mono">
+              <span className="text-pink-500">c²</span>
+              <span className="text-white text-4xl mb-4">=</span>
+              <span className="text-cyan-400">a²</span>
+              <span className="text-white text-4xl mb-4">+</span>
+              <span className="text-green-400">b²</span>
+            </div>
+          </div>
+          
+          <div className="flex gap-4">
+            <div className="bg-slate-800 p-4 rounded-lg text-center w-40 border border-slate-600">
+               <span className="text-cyan-400 font-bold block text-xl mb-1">a</span>
+               <span className="text-xs text-slate-400">Altura</span>
+            </div>
+            <div className="bg-slate-800 p-4 rounded-lg text-center w-40 border border-slate-600">
+               <span className="text-green-400 font-bold block text-xl mb-1">b</span>
+               <span className="text-xs text-slate-400">Base</span>
+            </div>
+            <div className="bg-slate-800 p-4 rounded-lg text-center w-40 border-2 border-pink-500/50 bg-pink-500/10">
+               <span className="text-pink-500 font-bold block text-xl mb-1">c</span>
+               <span className="text-xs text-pink-300">Hipotenusa</span>
+            </div>
+          </div>
+
+          <div className="mt-4 animate-bounce text-slate-500 flex flex-col items-center">
+             <span className="text-sm">¡Ojo con el cuadrado!</span>
+             <ArrowRight className="rotate-90" />
+          </div>
+        </div>
+      )
+    },
+    {
+      id: 4,
+      title: "CALENTAMIENTO: POTENCIAS",
+      subtitle: "Antes de empezar, recordemos los cuadrados",
+      content: (
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 w-full max-w-4xl">
+          {[
+            { n: 3, res: 9 }, { n: 4, res: 16 }, { n: 5, res: 25 }, { n: 6, res: 36 },
+            { n: 8, res: 64 }, { n: 10, res: 100 }, { n: 12, res: 144 }, { n: 15, res: 225 }
+          ].map((item, idx) => (
+            <div key={idx} className="bg-slate-800 p-6 rounded-xl text-center border border-slate-700 hover:border-yellow-400 transition-all cursor-default group">
+              <div className="text-2xl text-slate-400 mb-2 group-hover:text-white transition-colors">
+                {item.n}²
+              </div>
+              <div className="text-4xl font-bold text-yellow-400 opacity-50 group-hover:opacity-100 transition-opacity">
+                {item.res}
+              </div>
+            </div>
+          ))}
+        </div>
+      )
+    },
+
+    // --- BLOQUE 3: CASO SUMA ---
+    {
+      id: 5,
+      title: "CASO 1: BUSCANDO AL JEFE",
+      subtitle: "Problema Guiado",
+      content: (
+        <div className="flex flex-col md:flex-row gap-12 items-start w-full max-w-5xl">
+          {/* Visual Problem */}
+          <div className="flex-1 bg-white rounded-xl p-8 flex items-center justify-center min-h-[300px]">
+            <svg width="250" height="200" viewBox="0 0 250 200">
+              <line x1="50" y1="20" x2="50" y2="150" stroke="#334155" strokeWidth="4" />
+              <text x="20" y="90" fontSize="20" fontWeight="bold" fill="#334155">6m</text>
+              
+              <line x1="50" y1="150" x2="200" y2="150" stroke="#334155" strokeWidth="4" />
+              <text x="110" y="180" fontSize="20" fontWeight="bold" fill="#334155">8m</text>
+              
+              <line x1="50" y1="20" x2="200" y2="150" stroke="#ec4899" strokeWidth="4" strokeDasharray="10,5"/>
+              <text x="130" y="70" fontSize="30" fontWeight="bold" fill="#ec4899">x?</text>
+              
+              <rect x="50" y="130" width="20" height="20" fill="none" stroke="#334155" strokeWidth="2" />
+            </svg>
+          </div>
+
+          {/* Steps */}
+          <div className="flex-1 space-y-4 w-full">
+            <div className="bg-slate-800 p-4 rounded-lg border-l-4 border-pink-500">
+              <p className="text-white font-bold flex items-center gap-2">
+                <HelpCircle size={20}/> Misión: Encontrar la Hipotenusa
+              </p>
+            </div>
+
+            {/* Step 1 */}
+            <div className={`transition-all duration-500 ${step >= 1 ? 'opacity-100 translate-x-0' : 'opacity-0 -translate-x-4'}`}>
+              <div className="flex justify-between items-center text-xl text-slate-300 border-b border-slate-700 pb-2">
+                <span>1. Cuadrados:</span>
+                <div>
+                  <span className="font-mono text-cyan-400 block text-right">6² = 36</span>
+                  <span className="font-mono text-green-400 block text-right">8² = 64</span>
+                </div>
+              </div>
+            </div>
+
+            {/* Step 2 */}
+            <div className={`transition-all duration-500 ${step >= 2 ? 'opacity-100 translate-x-0' : 'opacity-0 -translate-x-4'}`}>
+              <div className="flex justify-between items-center text-xl text-slate-300 border-b border-slate-700 pb-2">
+                <span>2. Operación (Sumar):</span>
+                <span className="font-mono text-yellow-400">36 + 64 = 100</span>
+              </div>
+            </div>
+
+             {/* Step 3 */}
+             <div className={`transition-all duration-500 ${step >= 3 ? 'opacity-100 translate-x-0' : 'opacity-0 -translate-x-4'}`}>
+              <div className="flex justify-between items-center text-2xl text-white font-bold bg-slate-800 p-3 rounded">
+                <span>3. Raíz:</span>
+                <span className="font-mono text-pink-500">√100 = 10m</span>
+              </div>
+            </div>
+
+            <button 
+              onClick={nextStep} 
+              disabled={step >= 3}
+              className="mt-4 w-full bg-blue-600 hover:bg-blue-500 disabled:opacity-0 text-white py-2 rounded-lg font-bold transition-all"
+            >
+              Mostrar Siguiente Paso
+            </button>
+          </div>
+        </div>
+      )
+    },
+
+    // --- BLOQUE 4: CASO RESTA ---
+    {
+      id: 6,
+      title: "CASO 2: BUSCANDO UN CATETO",
+      subtitle: "Problema Guiado",
+      content: (
+        <div className="flex flex-col md:flex-row gap-12 items-start w-full max-w-5xl">
+          {/* Visual Problem */}
+          <div className="flex-1 bg-white rounded-xl p-8 flex items-center justify-center min-h-[300px]">
+            <svg width="250" height="200" viewBox="0 0 250 200">
+              <line x1="50" y1="20" x2="50" y2="150" stroke="#334155" strokeWidth="4" strokeDasharray="10,5"/>
+              <text x="10" y="90" fontSize="24" fontWeight="bold" fill="#22d3ee">a?</text>
+              
+              <line x1="50" y1="150" x2="200" y2="150" stroke="#334155" strokeWidth="4" />
+              <text x="110" y="180" fontSize="20" fontWeight="bold" fill="#334155">12m</text>
+              
+              <line x1="50" y1="20" x2="200" y2="150" stroke="#ec4899" strokeWidth="4" />
+              <text x="130" y="70" fontSize="20" fontWeight="bold" fill="#ec4899">Jefe: 15m</text>
+              
+              <rect x="50" y="130" width="20" height="20" fill="none" stroke="#334155" strokeWidth="2" />
+            </svg>
+          </div>
+
+          {/* Steps */}
+          <div className="flex-1 space-y-4 w-full">
+            <div className="bg-slate-800 p-4 rounded-lg border-l-4 border-yellow-500">
+               <p className="text-white font-bold flex items-center gap-2">
+                <HelpCircle size={20}/> Misión: Encontrar un Cateto
+              </p>
+            </div>
+
+            {/* Step 1 */}
+            <div className={`transition-all duration-500 ${step >= 1 ? 'opacity-100 translate-x-0' : 'opacity-0 -translate-x-4'}`}>
+              <div className="flex justify-between items-center text-xl text-slate-300 border-b border-slate-700 pb-2">
+                <span>1. Cuadrados:</span>
+                <div>
+                  <span className="font-mono text-pink-400 block text-right">15² = 225</span>
+                  <span className="font-mono text-green-400 block text-right">12² = 144</span>
+                </div>
+              </div>
+            </div>
+
+            {/* Step 2 */}
+            <div className={`transition-all duration-500 ${step >= 2 ? 'opacity-100 translate-x-0' : 'opacity-0 -translate-x-4'}`}>
+              <div className="flex justify-between items-center text-xl text-slate-300 border-b border-slate-700 pb-2">
+                <span>2. Operación (Restar):</span>
+                <span className="font-mono text-yellow-400">225 - 144 = 81</span>
+              </div>
+            </div>
+
+             {/* Step 3 */}
+             <div className={`transition-all duration-500 ${step >= 3 ? 'opacity-100 translate-x-0' : 'opacity-0 -translate-x-4'}`}>
+              <div className="flex justify-between items-center text-2xl text-white font-bold bg-slate-800 p-3 rounded">
+                <span>3. Raíz:</span>
+                <span className="font-mono text-cyan-400">√81 = 9m</span>
+              </div>
+            </div>
+
+            <button 
+              onClick={nextStep} 
+              disabled={step >= 3}
+              className="mt-4 w-full bg-blue-600 hover:bg-blue-500 disabled:opacity-0 text-white py-2 rounded-lg font-bold transition-all"
+            >
+              Mostrar Siguiente Paso
+            </button>
+          </div>
+        </div>
+      )
+    },
+
+    // --- BLOQUE 5: PROBLEMAS REALES ---
+    {
+      id: 7,
+      title: "LA ESCALERA CORRECTA",
+      subtitle: "¿Cuál elegimos de la bodega?",
+      content: (
+        <div className="flex flex-col items-center max-w-4xl w-full">
+           <div className="bg-slate-800 p-6 rounded-2xl border border-slate-700 mb-8 w-full">
+              <p className="text-xl leading-relaxed mb-4">
+                "Tenemos que pintar una pared a <strong className="text-cyan-400">4 metros</strong> de altura. 
+                Por seguridad, la escalera debe apoyarse en el suelo a <strong className="text-green-400">3 metros</strong> de la pared."
+              </p>
+              <div className="bg-slate-700/50 p-4 rounded-lg border border-slate-600">
+                <p className="text-sm text-slate-300 mb-2 font-bold">INVENTARIO DE ESCALERAS:</p>
+                <div className="flex gap-4">
+                  <span className="px-3 py-1 bg-slate-600 rounded text-slate-300">Opción A: 4m</span>
+                  <span className="px-3 py-1 bg-slate-600 rounded text-slate-300">Opción B: 5m</span>
+                  <span className="px-3 py-1 bg-slate-600 rounded text-slate-300">Opción C: 6m</span>
+                </div>
+              </div>
+           </div>
+
+           {/* Solution Area */}
+           <div className="w-full">
+             {step === 0 ? (
+               <div className="text-center p-8 border-2 border-dashed border-slate-600 rounded-xl">
+                 <p className="text-slate-400 text-lg mb-4">¿Cuánto debe medir la escalera para llegar justo al punto?</p>
+                 <button onClick={nextStep} className="bg-cyan-600 hover:bg-cyan-500 text-white px-8 py-3 rounded-full font-bold">
+                   Ver Solución
+                 </button>
+               </div>
+             ) : (
+               <div className="grid grid-cols-1 md:grid-cols-2 gap-8 animate-in fade-in slide-in-from-bottom-8 duration-700">
+                 <div className="bg-white rounded-lg p-4 flex items-end justify-center h-56 relative overflow-hidden">
+                    {/* Scene SVG */}
+                    <svg width="200" height="200" viewBox="0 0 200 200">
+                      {/* Wall */}
+                      <rect x="20" y="20" width="10" height="180" fill="#94a3b8" />
+                      <line x1="30" y1="50" x2="180" y2="50" stroke="#ef4444" strokeWidth="2" strokeDasharray="5,5" />
+                      <text x="35" y="45" fontSize="12" fill="#ef4444" fontWeight="bold">Objetivo: 4m</text>
+                      
+                      {/* Floor */}
+                      <line x1="0" y1="180" x2="200" y2="180" stroke="#334155" strokeWidth="4" />
+                      
+                      {/* Ladder (Simple Representation) */}
+                      <line x1="30" y1="50" x2="130" y2="180" stroke="#f97316" strokeWidth="8" strokeLinecap="round" />
+                      {/* Rungs */}
+                      <line x1="35" y1="60" x2="40" y2="60" stroke="white" strokeWidth="2" />
+                      <line x1="50" y1="80" x2="55" y2="80" stroke="white" strokeWidth="2" />
+                      <line x1="65" y1="100" x2="70" y2="100" stroke="white" strokeWidth="2" />
+                      <line x1="80" y1="120" x2="85" y2="120" stroke="white" strokeWidth="2" />
+                      <line x1="95" y1="140" x2="100" y2="140" stroke="white" strokeWidth="2" />
+                      <line x1="110" y1="160" x2="115" y2="160" stroke="white" strokeWidth="2" />
+
+                      {/* Labels */}
+                      <text x="60" y="195" fontSize="14" fontWeight="bold" fill="#334155">Base: 3m</text>
+                    </svg>
+                 </div>
+                 <div className="flex flex-col justify-center space-y-2 text-left">
+                   <p className="text-lg text-slate-300">Buscamos el lado largo (escalera):</p>
+                   <p className="text-xl font-mono text-yellow-400">h = √(4² + 3²)</p>
+                   <p className="text-xl font-mono">h = √(16 + 9)</p>
+                   <p className="text-xl font-mono">h = √25</p>
+                   <div className="mt-4 p-4 bg-green-500/20 border border-green-500 rounded-lg">
+                     <p className="text-xl font-bold text-green-400">Resultado: 5 metros</p>
+                     <p className="text-sm text-green-200">¡Elegimos la Opción B!</p>
+                   </div>
+                 </div>
+               </div>
+             )}
+           </div>
+        </div>
+      )
+    },
+    {
+      id: 8,
+      title: "PRÁCTICA: EL TELEVISOR",
+      subtitle: "¿De cuántas pulgadas es tu TV?",
+      content: (
+        <div className="flex flex-col items-center max-w-4xl w-full">
+           <div className="bg-slate-800 p-6 rounded-2xl border border-slate-700 mb-8 w-full flex items-center gap-6">
+              <div className="bg-blue-500/20 p-4 rounded-full text-blue-400">
+                <Monitor size={40} />
+              </div>
+              <div className="text-left">
+                <p className="text-xl leading-relaxed">
+                  "Una pantalla mide <strong className="text-cyan-400">16 pulgadas</strong> de ancho y <strong className="text-green-400">12 pulgadas</strong> de alto. 
+                  ¿De cuántas pulgadas es el televisor? (Recuerda: se mide la diagonal)."
+                </p>
+              </div>
+           </div>
+
+           {/* Solution Area */}
+           <div className="w-full">
+             {step === 0 ? (
+               <div className="text-center p-12 border-2 border-dashed border-slate-600 rounded-xl">
+                 <p className="text-slate-400 text-lg mb-4">¡A calcular!</p>
+                 <button onClick={nextStep} className="bg-green-600 hover:bg-green-500 text-white px-8 py-3 rounded-full font-bold">
+                   Ver Solución
+                 </button>
+               </div>
+             ) : (
+               <div className="grid grid-cols-1 md:grid-cols-2 gap-8 animate-in fade-in slide-in-from-bottom-8 duration-700">
+                 <div className="bg-slate-700 rounded-lg p-4 flex items-center justify-center h-48 relative overflow-hidden">
+                    <div className="w-40 h-32 border-4 border-slate-400 bg-black relative">
+                       <div className="absolute top-0 left-0 w-full h-full border-t border-l border-white/10"></div>
+                       <div className="absolute top-0 left-0 w-[128%] h-1 bg-pink-500 origin-top-left rotate-[37deg]"></div>
+                       <span className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-pink-500 font-bold bg-black/50 px-1">?</span>
+                    </div>
+                 </div>
+                 <div className="flex flex-col justify-center space-y-2 text-left">
+                   <p className="text-lg">Buscamos la diagonal (Hipotenusa):</p>
+                   <p className="text-xl font-mono text-yellow-400">d = √(16² + 12²)</p>
+                   <p className="text-xl font-mono">d = √(256 + 144)</p>
+                   <p className="text-xl font-mono">d = √400</p>
+                   <p className="text-3xl font-black text-pink-400 border-2 border-pink-400 p-2 inline-block rounded">TV = 20"</p>
+                 </div>
+               </div>
+             )}
+           </div>
+        </div>
+      )
+    },
+    {
+      id: 9,
+      title: "¿LO LOGRAMOS?",
+      subtitle: "Repaso final antes de irnos",
+      content: (
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 w-full max-w-6xl mt-8">
+           <div className="bg-slate-800 p-6 rounded-xl border-t-4 border-pink-500 flex flex-col items-center">
+              <Crown className="text-pink-500 mb-4" size={40} />
+              <h3 className="font-bold text-xl mb-2">Hipotenusa</h3>
+              <p className="text-sm text-slate-400">Lado largo. Se encuentra <strong>SUMANDO</strong> cuadrados.</p>
+           </div>
+           <div className="bg-slate-800 p-6 rounded-xl border-t-4 border-cyan-500 flex flex-col items-center">
+              <Footprints className="text-cyan-500 mb-4" size={40} />
+              <h3 className="font-bold text-xl mb-2">Catetos</h3>
+              <p className="text-sm text-slate-400">Lados cortos. Se encuentran <strong>RESTANDO</strong> al cuadrado.</p>
+           </div>
+           <div className="bg-slate-800 p-6 rounded-xl border-t-4 border-yellow-500 flex flex-col items-center">
+              <Calculator className="text-yellow-500 mb-4" size={40} />
+              <h3 className="font-bold text-xl mb-2">No Olvides</h3>
+              <p className="text-sm text-slate-400">Al final, siempre, siempre... <strong>¡SACA LA RAÍZ!</strong></p>
+           </div>
+        </div>
+      )
+    }
+  ];
+
+  return (
+    <div className="min-h-screen bg-slate-950 text-white font-sans flex flex-col items-center p-2 selection:bg-pink-500 selection:text-white">
+      
+      {/* Main Slide Container */}
+      <div className="w-full h-[90vh] max-w-7xl bg-slate-900 rounded-2xl shadow-2xl overflow-hidden border border-slate-800 relative flex flex-col">
+        
+        {/* Top Bar: Progress & Title */}
+        <div className="h-16 bg-slate-900 border-b border-slate-800 flex items-center justify-between px-8 z-20">
+           <div className="flex items-center gap-4">
+              <span className="text-cyan-400 font-bold tracking-wider">
+                {slides[currentSlide].title}
+              </span>
+           </div>
+           <div className="flex gap-1">
+             {slides.map((s, idx) => (
+               <div key={idx} className={`h-1 w-8 rounded-full transition-all ${idx === currentSlide ? 'bg-pink-500' : idx < currentSlide ? 'bg-cyan-500' : 'bg-slate-800'}`}></div>
+             ))}
+           </div>
+        </div>
+
+        {/* Slide Content Area */}
+        <div className="flex-1 flex flex-col items-center justify-start pt-10 px-8 md:px-16 relative overflow-y-auto">
+          
+          {/* Background Ambient Light */}
+          <div className="absolute top-0 left-0 w-full h-full overflow-hidden pointer-events-none opacity-10 fixed">
+            <div className="absolute top-[20%] left-[20%] w-[500px] h-[500px] bg-blue-600 rounded-full blur-[120px]"></div>
+            <div className="absolute bottom-[20%] right-[20%] w-[500px] h-[500px] bg-purple-600 rounded-full blur-[120px]"></div>
+          </div>
+
+          {/* Dynamic Content */}
+          <div className="z-10 w-full flex flex-col items-center text-center animate-in fade-in slide-in-from-right-4 duration-500 key={currentSlide}">
+            
+            <h1 className="text-4xl md:text-6xl font-black text-transparent bg-clip-text bg-gradient-to-r from-cyan-300 via-white to-pink-400 drop-shadow-sm mb-4">
+              {slides[currentSlide].title}
+            </h1>
+
+            {slides[currentSlide].subtitle && (
+              <p className="text-xl md:text-2xl text-slate-400 mb-12 font-light border-b border-slate-800 pb-4 w-full max-w-2xl">
+                {slides[currentSlide].subtitle}
+              </p>
+            )}
+
+            {/* Main Body */}
+            <div className="w-full flex justify-center h-full pb-20">
+              {slides[currentSlide].content}
+            </div>
+          </div>
+
+        </div>
+
+        {/* Navigation Controls (Bottom Fixed) */}
+        <div className="h-20 bg-slate-900 border-t border-slate-800 flex items-center justify-between px-8 z-30 absolute bottom-0 w-full">
+          
+          <button 
+            onClick={() => changeSlide('prev')}
+            disabled={currentSlide === 0}
+            className={`flex items-center gap-2 px-6 py-3 rounded-xl font-bold transition-all ${currentSlide === 0 ? 'opacity-30 cursor-not-allowed' : 'hover:bg-slate-800 text-slate-300 hover:text-white'}`}
+          >
+            <ChevronLeft size={24} />
+            ANTERIOR
+          </button>
+
+          <span className="font-mono text-slate-500 text-sm hidden md:block">
+            {currentSlide + 1} / {slides.length}
+          </span>
+
+          <button 
+            onClick={() => changeSlide('next')}
+            disabled={currentSlide === slides.length - 1}
+            className={`flex items-center gap-2 px-6 py-3 rounded-xl font-bold transition-all bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-500 hover:to-blue-500 shadow-lg shadow-cyan-900/20 text-white ${currentSlide === slides.length - 1 ? 'opacity-50 cursor-not-allowed' : ''}`}
+          >
+            SIGUIENTE
+            <ChevronRight size={24} />
+          </button>
+
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default SlideDeck;
